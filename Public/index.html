@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscar Usuario por Nombre de Usuario</title>
+  
+  <!-- Agrega el siguiente elemento link para desactivar la búsqueda automática del favicon -->
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=" type="image/x-icon">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    h2 {
+      margin-top: 20px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Buscar Usuario por Nombre de Usuario</h1>
+
+<label for="username">Nombre de Usuario:</label>
+<input type="text" id="username" placeholder="Ingrese el nombre de usuario">
+<button onclick="searchUser()">Buscar Usuario</button>
+
+<!-- Cambiado de <pre> a <h2> para mostrar el usuario encontrado -->
+<h2 id="searchResult"></h2>
+
+<script>
+  function searchUser() {
+    const username = document.getElementById('username').value;
+    const searchResultElement = document.getElementById('searchResult');
+
+    fetch(`http://localhost:3000/User/${username}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then(user => {
+        if (user && Object.keys(user).length > 0) {
+          // Mostrar el usuario encontrado con un h2
+          searchResultElement.innerHTML = `<strong>Usuario Encontrado:</strong><br>${JSON.stringify(user, null, 2)}`;
+        } else {
+          searchResultElement.innerHTML = 'Usuario no encontrado';
+        }
+      })
+      .catch(error => console.error('Error al buscar usuario por nombre de usuario:', error));
+  }
+</script>
+
+</body>
+</html>
